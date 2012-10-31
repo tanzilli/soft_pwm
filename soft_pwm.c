@@ -7,6 +7,12 @@
  * resolution timers and GPIO lib interface.
 */
 
+/* Modified by Sergio Tanzilli
+   http://www.acmesystems.it/soft_pwm
+   http://www.acmesystems.it/DAISY-2
+*/
+
+
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/moduleparam.h>
@@ -102,7 +108,7 @@ static ssize_t pwm_store(
         desc->pulses = (unsigned int)value;
       }
       desc->next_tick = ktime_get();
-      printk(KERN_INFO "Starting timer (%s).\n", attr->attr.name);
+      //printk(KERN_INFO "Starting timer (%s).\n", attr->attr.name);
       hrtimer_start(&hr_timer, ktime_set(0,1), HRTIMER_MODE_REL);
     }
   }
@@ -289,7 +295,7 @@ enum hrtimer_restart soft_pwm_hrtimer_callback(struct hrtimer *timer){
   if(next_tick.tv64>0){
     hrtimer_start(&hr_timer, next_tick, HRTIMER_MODE_ABS);
   }else{
-    printk(KERN_INFO "Stopping timer.\n");
+    //printk(KERN_INFO "Stopping timer.\n");
   }
   return HRTIMER_NORESTART;
 }
@@ -299,7 +305,7 @@ static int __init soft_pwm_init(void){
   struct timespec tp;
 
   int status;
-  printk(KERN_INFO "SoftPWM v0.1 initializing.\n");
+  printk(KERN_INFO "SoftPWM v0.1-acme initializing.\n");
 
   hrtimer_get_res(CLOCK_MONOTONIC, &tp);
   printk(KERN_INFO "Clock resolution is %ldns\n", tp.tv_nsec);
