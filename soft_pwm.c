@@ -105,6 +105,9 @@ static ssize_t pwm_store(
       }else if(strcmp(attr->attr.name, "period")==0){
         desc->period = (unsigned int)value;
       }else if(strcmp(attr->attr.name, "pulses")==0){
+       if (value>0)
+         desc->pulses = (unsigned int)value*2;
+       else 
         desc->pulses = (unsigned int)value;
       }
       desc->next_tick = ktime_get();
@@ -305,7 +308,7 @@ static int __init soft_pwm_init(void){
   struct timespec tp;
 
   int status;
-  printk(KERN_INFO "SoftPWM v0.1-acme initializing.\n");
+  printk(KERN_INFO "SoftPWM v0.2-acme initializing.\n");
 
   hrtimer_get_res(CLOCK_MONOTONIC, &tp);
   printk(KERN_INFO "Clock resolution is %ldns\n", tp.tv_nsec);
