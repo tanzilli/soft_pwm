@@ -98,7 +98,7 @@ static ssize_t pwm_store(
     status = -EIO;
   }else{
     unsigned long value;
-    status = strict_strtoul(buf, 0, &value);
+    status = strict_strtol(buf, 0, &value);
     if(status==0){
       if(strcmp(attr->attr.name, "pulse")==0){
         if(value<=desc->period){ desc->pulse = (unsigned int)value; }
